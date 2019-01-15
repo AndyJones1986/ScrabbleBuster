@@ -14,12 +14,20 @@ namespace ScrabbleBusterData.Tests
         [TestMethod]
         public void InsantiateDBTest()
         {
-            using (Common dbCommon = new Common("TESTDB"))
+            using (Data data = new Data("UNITTESTDB"))
             {
-                Assert.IsNotNull(Common.Database);
+                Assert.IsNotNull(data.Database);
             };
 
-            Assert.IsNull(Common.Database);
+        }
+
+        [TestMethod]
+        public void GetWordsCollection()
+        {
+            using (Data data = new Data("UNITTESTDB"))
+            {
+
+            }
         }
     }
 }

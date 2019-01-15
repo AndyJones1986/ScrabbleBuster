@@ -7,12 +7,13 @@ using LiteDB;
 
 namespace ScrabbleBusterData
 {
-    public class Common : IDisposable
+    public class Data : IDisposable
     {
-        public static LiteDatabase Database { get; set; }
-        public Common(string databaseName)
+        private const string dbName = "scrableBusterDB";
+        public LiteDatabase Database { get; set; }
+        public Data(string instanceName = "core")
         {
-            Database = new LiteDatabase(databaseName);
+            Database = new LiteDatabase(string.Format("{0}_{1}", instanceName, dbName));
         }
 
         public void Dispose()
