@@ -14,20 +14,41 @@ namespace ScrabbleBusterData.Tests
         [TestMethod]
         public void InsantiateDBTest()
         {
-            using (Data data = new Data("UNITTESTDB"))
-            {
-                Assert.IsNotNull(data.Database);
-            };
+            List<string> testData = new List<string>();
 
+            testData.Add("one");
+            testData.Add("two");
+            testData.Add("three");
+            testData.Add("four");
+
+            using (TestDB db = new TestDB("UnittestDB"))
+            {
+                testData.ForEach(testString => db.Insert(new TestObject() { Value = testString }));
+                testData.ForEach(testString =>
+                {
+                    Assert.IsFalse(db.Select(item => { return item.Value == testString; }).Count() == 0, string.Format("{0} not found", testString));
+                });
+
+                var storedData = db.Select();
+                storedData.ToList().ForEach(dbItem => {
+
+                });
+            };
         }
 
-        [TestMethod]
-        public void GetWordsCollection()
-        {
-            using (Data data = new Data("UNITTESTDB"))
-            {
+    }
 
-            }
+    class TestObject
+    {
+        public int Id { get; set; }
+        public string Value { get; set; }
+    }
+
+    class TestDB : DataAccessBase<TestObject>
+    {
+        public TestDB(string instanceName) : base(instanceName)
+        {
+
         }
     }
 }

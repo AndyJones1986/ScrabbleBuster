@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ScrabbleBusterData.Tables.Structure;
+
+namespace ScrabbleBusterData.Tables
+{
+    public class Words : DataAccessBase<Word>
+    {
+
+    }
+}
