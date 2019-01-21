@@ -1,25 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ScrabbleBusterData.Tables.Structure;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq.Expressions;
 using LiteDB;
 
 namespace ScrabbleBusterData
 {
-    public abstract class DataAccessBase<ITable> : IDisposable
+    public abstract class DataAccessBase<T> : IDisposable
     {
         private const string dbName = "scrableBusterDB";
-        private List<ITable> _data { get; set; }
-        private LiteCollection<ITable> _collection { get; set; }
+        private List<T> _data { get; set; }
+        private LiteCollection<T> _collection { get; set; }
         private LiteDatabase _database { get; set; }
 
-        public string CollectionName { get { return typeof(ITable).Name; } }
+        public string CollectionName { get { return typeof(T).Name; } }
 
         public DataAccessBase(string instanceName = "core")
         {
             this._database = new LiteDatabase(string.Format("{0}_{1}", instanceName, dbName));
-            this._collection = _database.GetCollection<ITable>(this.CollectionName);
+            this._collection = _database.GetCollection<T>(this.CollectionName);
         }
 
         public void Dispose()
@@ -28,34 +30,40 @@ namespace ScrabbleBusterData
             this._database = null;
         }
 
-        public IEnumerable<ITable> Select(Func<ITable, bool> predicate)
+        public IEnumerable<T> Select(Func<T, bool> predicate)
         {
             return _collection.FindAll().Where(predicate);
         }
 
-        public IEnumerable<ITable> Select()
+        public IEnumerable<T> Select()
         {
             return _collection.FindAll();
         }
 
-        public void Insert(ITable record)
+        public void Insert(T record)
         {
             _collection.Insert(record);
         }
 
-        public void Update(ITable record)
+        public void Insert(List<T> records)
+        {
+            records.ForEach(record => _collection.Insert(record));
+        }
+
+        public void Update(T record)
         {
             _collection.Update(record);
         }
 
-        public void Delete()
+        public int Delete()
         {
-            _collection.Delete(item => true);
+            return _collection.Delete(item => true);
         }
 
-        public void Delete(System.Linq.Expressions.Expression<Func<ITable, bool>> predicate)
+        public int Delete(Query query)
         {
-            _collection.Delete(predicate);
+            return _collection.Delete(query);
+
         }
     }
 }

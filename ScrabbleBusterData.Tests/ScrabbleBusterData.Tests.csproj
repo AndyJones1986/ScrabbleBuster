@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Resources\wordList.csv" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ScrabbleBusterData\ScrabbleBusterData.csproj">

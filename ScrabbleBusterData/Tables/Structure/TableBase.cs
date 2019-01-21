@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ScrabbleBusterData.Tables.Structure
 {
-    public abstract class ITable
+    public class TableBase
     {
        public int Id { get; set; }
 }

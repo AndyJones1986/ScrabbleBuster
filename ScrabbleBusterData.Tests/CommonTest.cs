@@ -11,40 +11,75 @@ namespace ScrabbleBusterData.Tests
     [TestClass]
     public class CommonTest
     {
-        [TestMethod]
-        public void InsantiateDBTest()
+        private const string testDbName = "UnitTestDB";
+        private List<TestObject> TestData()
         {
-            List<string> testData = new List<string>();
+            List<TestObject> testData = new List<TestObject>();
 
-            testData.Add("one");
-            testData.Add("two");
-            testData.Add("three");
-            testData.Add("four");
+            testData.Add(new TestObject() { Value = "one" });
+            testData.Add(new TestObject() { Value = "two" });
+            testData.Add(new TestObject() { Value = "three" });
+            testData.Add(new TestObject() { Value = "four" });
+            return testData;
+        }
 
-            using (TestDB db = new TestDB("UnittestDB"))
+        [TestMethod]
+        public void DBBasics()
+        {
+            using (TestDB db = new TestDB(testDbName))
             {
-                testData.ForEach(testString => db.Insert(new TestObject() { Value = testString }));
-                testData.ForEach(testString =>
+                db.Delete();
+            }
+            DBInsertTest();
+            DBDeleteTest();
+        }
+
+        private void DBInsertTest()
+        {
+            using (TestDB db = new TestDB(testDbName))
+            {
+                TestData().ForEach(testString => db.Insert(testString));
+                TestData().ForEach(testString =>
                 {
-                    Assert.IsFalse(db.Select(item => { return item.Value == testString; }).Count() == 0, string.Format("{0} not found", testString));
+                    Assert.IsTrue(db.Select(item => { return item.Value == testString.Value; }).Count() == 1, string.Format("{0} not found", testString.Value));
                 });
 
                 var storedData = db.Select();
-                storedData.ToList().ForEach(dbItem => {
-
+                storedData.ToList().ForEach(dbItem =>
+                {
+                    Assert.IsTrue(TestData().Any(item => item.Value == dbItem.Value), string.Format("Crosscheck fail {0}", dbItem));
                 });
+
             };
+        }
+
+        private void DBDeleteTest()
+        {
+            using (TestDB db = new TestDB(testDbName))
+            {
+                Assert.AreEqual(db.Select().Count(), TestData().Count(), "Record Mismatch");
+
+                TestData().ForEach(testItem =>
+                {
+                    int deleted = db.Delete(LiteDB.Query.Where("Value", value => value.AsString == testItem.Value));
+                    Assert.AreEqual(deleted, 1, "Deleted Record Mismatch");
+                });
+
+                DBInsertTest();
+
+                int fullDelete = db.Delete();
+                Assert.AreEqual(fullDelete, TestData().Count(), "Deleted Record Mismatch");
+            }
         }
 
     }
 
-    class TestObject
+    public class TestObject : Tables.Structure.TableBase
     {
-        public int Id { get; set; }
         public string Value { get; set; }
     }
 
-    class TestDB : DataAccessBase<TestObject>
+    public class TestDB : DataAccessBase<TestObject>
     {
         public TestDB(string instanceName) : base(instanceName)
         {
