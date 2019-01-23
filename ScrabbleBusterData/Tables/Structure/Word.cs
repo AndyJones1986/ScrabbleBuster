@@ -9,14 +9,14 @@ namespace ScrabbleBusterData.Tables.Structure
     [Serializable()]
     public class Word : TableBase
     {
-        public string Value { get; set; }
-        public IEnumerable<string> Letters
+        public string Text { get; set; }
+        public IEnumerable<char> Letters
         {
             get
             {
-                if (!string.IsNullOrWhiteSpace(Value))
+                if (!string.IsNullOrWhiteSpace(Text))
                 {
-                    return Value.Select(letter => new string(letter, 1)).AsEnumerable();
+                    return Text.Select(letter => Convert.ToChar(new string(letter, 1))).AsEnumerable();
                 }
                 else
                 {
@@ -24,9 +24,15 @@ namespace ScrabbleBusterData.Tables.Structure
                 }
             }
         }
-        public Word(string value)
+
+        public Word()
         {
-            this.Value = value;
+
+        }
+
+        public Word(string text)
+        {
+            this.Text = text;
         }
     }
 }

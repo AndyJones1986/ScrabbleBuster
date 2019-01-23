@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ScrabbleBusterData;
+using ScrabbleBusterData.Tables.Structure;
 
 namespace ScrabbleBusterData.Tests
 {
@@ -24,20 +25,11 @@ namespace ScrabbleBusterData.Tests
         }
 
         [TestMethod]
-        public void DBBasics()
+        public void DBInsertTest()
         {
-            using (TestDB db = new TestDB(testDbName))
+            using (TestDB db = new TestDB(testDbName + "INSERT"))
             {
                 db.Delete();
-            }
-            DBInsertTest();
-            DBDeleteTest();
-        }
-
-        private void DBInsertTest()
-        {
-            using (TestDB db = new TestDB(testDbName))
-            {
                 TestData().ForEach(testString => db.Insert(testString));
                 TestData().ForEach(testString =>
                 {
@@ -50,13 +42,17 @@ namespace ScrabbleBusterData.Tests
                     Assert.IsTrue(TestData().Any(item => item.Value == dbItem.Value), string.Format("Crosscheck fail {0}", dbItem));
                 });
 
+                int fullDelete = db.Delete();
+                Assert.AreEqual(fullDelete, TestData().Count(), "Deleted Record Mismatch");
             };
         }
-
-        private void DBDeleteTest()
+        [TestMethod]
+        public void DBDeleteTest()
         {
-            using (TestDB db = new TestDB(testDbName))
+            using (TestDB db = new TestDB(testDbName + "DELETE"))
             {
+                db.Delete();
+                db.Insert(TestData());
                 Assert.AreEqual(db.Select().Count(), TestData().Count(), "Record Mismatch");
 
                 TestData().ForEach(testItem =>
@@ -65,7 +61,29 @@ namespace ScrabbleBusterData.Tests
                     Assert.AreEqual(deleted, 1, "Deleted Record Mismatch");
                 });
 
-                DBInsertTest();
+                db.Insert(TestData());
+                int fullDelete = db.Delete();
+                Assert.AreEqual(fullDelete, TestData().Count(), "Deleted Record Mismatch");
+            }
+        }
+
+        [TestMethod]
+        public void DBUpdateTest()
+        {
+            using (TestDB db = new TestDB(testDbName + "UPDATE"))
+            {
+                db.Delete();
+                db.Insert(TestData());
+
+                db.Select().ToList().ForEach(record =>
+                {
+                    record.Value = "adjusted";
+                    db.Update(record);
+
+                    TestObject adjustedRecord = db.Select(x => x.Id == record.Id).First();
+
+                    Assert.AreEqual(record.Value, adjustedRecord.Value, "UPDATE FAILED");
+                });
 
                 int fullDelete = db.Delete();
                 Assert.AreEqual(fullDelete, TestData().Count(), "Deleted Record Mismatch");
@@ -74,7 +92,7 @@ namespace ScrabbleBusterData.Tests
 
     }
 
-    public class TestObject : Tables.Structure.TableBase
+    public class TestObject : TableBase
     {
         public string Value { get; set; }
     }

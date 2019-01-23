@@ -18,9 +18,14 @@ namespace ScrabbleBusterData
 
         public string CollectionName { get { return typeof(T).Name; } }
 
+        public DataAccessBase()
+        {
+
+        }
+
         public DataAccessBase(string instanceName = "core")
         {
-            this._database = new LiteDatabase(string.Format("{0}_{1}", instanceName, dbName));
+            this._database = new LiteDatabase(string.Format("{0}_{1}.db", instanceName, dbName));
             this._collection = _database.GetCollection<T>(this.CollectionName);
         }
 
@@ -45,9 +50,9 @@ namespace ScrabbleBusterData
             _collection.Insert(record);
         }
 
-        public void Insert(List<T> records)
+        public void Insert(IEnumerable<T> records)
         {
-            records.ForEach(record => _collection.Insert(record));
+            _collection.Insert(records);
         }
 
         public void Update(T record)
