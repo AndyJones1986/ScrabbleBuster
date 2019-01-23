@@ -45,8 +45,7 @@
   <ItemGroup>
     <Compile Include="DataAccessBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tables\Hands.cs" />
-    <Compile Include="Tables\Structure\Hand.cs" />
+    <Compile Include="Tables\Letters.cs" />
     <Compile Include="Tables\Structure\Letter.cs" />
     <Compile Include="Tables\Structure\TableBase.cs" />
     <Compile Include="Tables\Structure\Word.cs" />
@@ -54,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Resources\ScrabbleLetters.csv" />
     <None Include="Resources\wordList.csv" />
   </ItemGroup>
   <ItemGroup />

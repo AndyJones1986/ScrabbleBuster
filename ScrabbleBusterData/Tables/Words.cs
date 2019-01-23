@@ -26,7 +26,7 @@ namespace ScrabbleBusterData.Tables
 
         }
 
-        public void RefreshStorage()
+        public override void RefreshStorage()
         {
             ConcurrentBag<Word> newWords = new ConcurrentBag<Word>();
             List<IGrouping<char, Word>> existingData = FirstLetters.ToList();
@@ -53,20 +53,6 @@ namespace ScrabbleBusterData.Tables
             });
 
             base.Insert(newWords.Distinct().ToList());
-
-            //SourceFileLines.GroupBy(grp => new { letter = Convert.ToChar(grp.Substring(0, 1)) }).Select(g => g.Key.letter)
-            //    .AsParallel().ForAll(c =>
-            //    {
-            //        var thisGroup = FirstLetters.Where(g => g.Key == c).ToList();
-            //        var newWordsGroup = SourceFileLines.Where(s => Convert.ToChar(s.Substring(0, 1)) == c);
-            //        foreach (var newWord in newWordsGroup.AsParallel())
-            //        {
-            //            if (base.Select(db => db.Text == newWord).Count() == 0)
-            //            {
-            //                base.Insert(new Word(newWord));
-            //            }
-            //        }
-            //    });
         }
     }
 }

@@ -99,6 +99,10 @@ namespace ScrabbleBusterData.Tests
 
     public class TestDB : DataAccessBase<TestObject>
     {
+        public override void RefreshStorage()
+        {
+            throw new NotImplementedException();
+        }
         public TestDB(string instanceName) : base(instanceName)
         {
 

@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace ScrabbleBusterData.Tables.Structure
 {
     public class Letter : TableBase
-    {       
+    {      
+        
         public char Character { get; set; }
         public int Score { get; set; }
     }

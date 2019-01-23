@@ -8,6 +8,10 @@ namespace ScrabbleBusterData.Tables.Structure
 {
     public class TableBase
     {
-       public int Id { get; set; }
-}
+        public int Id { get; set; }
+        public TableBase()
+        {
+
+        }
+    }
 }

@@ -23,6 +23,8 @@ namespace ScrabbleBusterData
 
         }
 
+        abstract public void RefreshStorage();
+
         public DataAccessBase(string instanceName = "core")
         {
             this._database = new LiteDatabase(string.Format("{0}_{1}.db", instanceName, dbName));
