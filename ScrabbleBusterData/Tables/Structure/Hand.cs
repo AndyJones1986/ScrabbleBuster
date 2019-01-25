@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace ScrabbleBusterData.Tables.Structure
 {
-    public class Letter : RecordBase
-    {      
-        
-        public char Character { get; set; }
-        public int Score { get; set; }
+    public class Hand : RecordBase
+    {
     }
 }

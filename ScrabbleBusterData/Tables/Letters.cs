@@ -9,12 +9,16 @@ using System.Collections.Concurrent;
 
 namespace ScrabbleBusterData.Tables
 {
-    public class Letters : DataAccessBase<Letter>
+    public class Letters : TableBase<Letter>
     {
         public string[] SourceFileLines { get { return File.ReadAllLines(@"..\..\Resources\ScrabbleLetters.csv"); } }
         public Letters(string instance = "") : base(instance)
         {
 
+        }
+
+        public Letters() : base("")
+        {
         }
 
         public override void RefreshStorage()

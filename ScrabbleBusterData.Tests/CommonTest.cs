@@ -92,12 +92,12 @@ namespace ScrabbleBusterData.Tests
 
     }
 
-    public class TestObject : TableBase
+    public class TestObject : RecordBase
     {
         public string Value { get; set; }
     }
 
-    public class TestDB : DataAccessBase<TestObject>
+    public class TestDB : TableBase<TestObject>
     {
         public override void RefreshStorage()
         {

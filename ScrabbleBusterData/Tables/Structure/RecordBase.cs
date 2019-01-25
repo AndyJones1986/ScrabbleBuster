@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace ScrabbleBusterData.Tables.Structure
 {
-    public class TableBase
+    public class RecordBase
     {
-        public int Id { get; set; }
-        public TableBase()
-        {
+        public DateTime Created { get; set; }
 
+        public int Id { get; set; }
+        public RecordBase()
+        {
+            Created = DateTime.Now;
         }
     }
 }

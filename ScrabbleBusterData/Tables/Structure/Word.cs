@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ScrabbleBusterData.Tables.Structure
 {
     [Serializable()]
-    public class Word : TableBase
+    public class Word : RecordBase
     {
         public string Text { get; set; }
         public IEnumerable<char> Letters

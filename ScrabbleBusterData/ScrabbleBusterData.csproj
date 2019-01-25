@@ -43,11 +43,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataAccessBase.cs" />
+    <Compile Include="TableBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tables\Games.cs" />
+    <Compile Include="Tables\Hands.cs" />
     <Compile Include="Tables\Letters.cs" />
+    <Compile Include="Tables\Structure\Game.cs" />
+    <Compile Include="Tables\Structure\Hand.cs" />
     <Compile Include="Tables\Structure\Letter.cs" />
-    <Compile Include="Tables\Structure\TableBase.cs" />
+    <Compile Include="Tables\Structure\RecordBase.cs" />
     <Compile Include="Tables\Structure\Word.cs" />
     <Compile Include="Tables\Words.cs" />
   </ItemGroup>

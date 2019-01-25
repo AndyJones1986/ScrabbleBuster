@@ -9,7 +9,7 @@ using System.Collections.Concurrent;
 
 namespace ScrabbleBusterData.Tables
 {
-    public class Words : DataAccessBase<Word>
+    public class Words : TableBase<Word>
     {
         public string[] SourceFileLines { get { return File.ReadAllLines(@"..\..\Resources\wordList.csv"); } }
         public IEnumerable<IGrouping<char, Word>> FirstLetters

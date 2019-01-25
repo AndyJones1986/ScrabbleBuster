@@ -9,7 +9,7 @@ using LiteDB;
 
 namespace ScrabbleBusterData
 {
-    public abstract class DataAccessBase<T> : IDisposable
+    public abstract class TableBase<T> : IDisposable
     {
         private const string dbName = "scrableBusterDB";
         private List<T> _data { get; set; }
@@ -18,14 +18,14 @@ namespace ScrabbleBusterData
 
         public string CollectionName { get { return typeof(T).Name; } }
 
-        public DataAccessBase()
+        public TableBase()
         {
 
         }
 
         abstract public void RefreshStorage();
 
-        public DataAccessBase(string instanceName = "core")
+        public TableBase(string instanceName = "core")
         {
             this._database = new LiteDatabase(string.Format("{0}_{1}.db", instanceName, dbName));
             this._collection = _database.GetCollection<T>(this.CollectionName);

@@ -42,14 +42,22 @@ namespace ScrabbleBusterData.Tests.Tables
         {
             using (Words wordTable = new Words(testDbName))
             {
-                var words = wordTable.SourceFileLines;
+                wordTable.Delete();
+                Random rand = new Random();
+                var words = Enumerable.Range(0, 50)
+                                .Select(r => wordTable.SourceFileLines[rand.Next(wordTable.SourceFileLines.Count())])
+                                .ToList();
+
+                var firstLetters = words.GroupBy(wrd => wrd.Substring(0, 1)).Select(g => g.Key).ToList();
+
                 wordTable.RefreshStorage();
-                foreach (var grp in wordTable.FirstLetters.AsParallel())
+                foreach (var letter in firstLetters.AsParallel())
                 {
-                    var wordBatch = grp.ToList();
-                    var originalWords = words.Where(w => w.StartsWith(grp.Key.ToString())).ToList();
-                    Assert.IsTrue(wordBatch.Distinct().Count() == originalWords.Distinct().Count());
-                }                
+                    words.Where(w => w.StartsWith(letter.ToString())).AsParallel().ForAll(testW =>
+                    {
+                        Assert.IsTrue(wordTable.Select(wt => wt.Text.Substring(0, 1).ToString() == letter).Any(w => w.Text.ToUpper() == testW), testW);
+                    });
+                }
             }
         }
 
